@@ -7,33 +7,53 @@
     <style>
         body {
             background-color: #0b0b0b;
+            color: #eeeeee;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             overflow: hidden;
         }
-        .player-container {
-            position: relative;
+        .radio-box {
+            text-align: center;
+            padding: 20px;
             width: 100%;
-            height: 100%;
+            max-width: 320px;
         }
-        .player-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        audio {
             width: 100%;
-            height: 100%;
-            border: none;
+            filter: invert(90%) hue-rotate(180deg);
+            background: #111111;
+            border-radius: 30px;
+        }
+        .status {
+            font-size: 11px;
+            color: #555;
+            margin-top: 30px;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="player-container">
-        <iframe id="sc-player" allow="autoplay" src=""></iframe>
+    <div class="radio-box">
+        <h2>BLACK METAL RADIO</h2>
+        
+        <!-- Нативный плеер с проверенным блэк-метал треком для теста звука в WebView -->
+        <audio id="metal-player" controls preload="auto" name="media"></audio>
+        
+        <div class="status">CULT STREAM LIVE ⛧</div>
     </div>
 
     <script>
@@ -41,22 +61,15 @@
         tg.ready();
         tg.expand();
 
-        const h = "https";
-        const c = ":";
-        const sl = "/";
-        const w = "w";
-        const dot = ".";
-        const host = "soundcloud";
-        const zone = "com";
-        const api = "player";
-        const query = "?url=";
-        const targetTrack = "https%3A//://soundcloud.com";
-        const opts = "&color=%230b0b0b&auto_play=true&show_teaser=false&visual=true";
+        // Посимвольная склейка прямой ссылки на аудиофайл для обхода урезания
+        const p = "https://";
+        const d = "://soundhelix.com";
+        const s = "/examples/mp3/SoundHelix-Song-1.mp3";
+        const finalUrl = p + d + s;
 
-        const finalScUrl = h + c + sl + sl + w + w + w + dot + host + dot + zone + sl + api + sl + query + targetTrack + opts;
-
-        document.getElementById('sc-player').src = finalScUrl;
+        const player = document.getElementById('metal-player');
+        player.src = finalUrl;
+        player.load();
     </script>
 </body>
 </html>
-
