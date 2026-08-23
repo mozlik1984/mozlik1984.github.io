@@ -43,16 +43,22 @@
             padding: 0 10px;
             color: #888;
         }
+        .debug-msg {
+            color: #ff3333;
+            font-size: 12px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <h2 id="track-title">Loading dark art...</h2>
+    <h2 id="track-title">STILL LOADING...</h2>
     
     <div class="player-container">
-        <!-- Чистый легальный iframe-плеер, который включит конкретное видео -->
         <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+    
+    <div id="debug" class="debug-msg"></div>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -64,24 +70,20 @@
         const album = urlParams.get('album') || '';
         const vid = urlParams.get('vid') || '';
         
-        if (vid) {
-            if (artist || album) {
-                document.getElementById('track-title').innerText = artist + " - " + album;
-            } else {
-                document.getElementById('track-title').innerText = "Playing Release";
-            }
+        // Выводим название в любом случае, чтобы понять, что JS работает
+        document.getElementById('track-title').innerText = artist + " - " + album;
 
-            // Классическая склейка через плюс для встраивания конкретного ID видео
+        if (vid && vid.length > 3) {
             const p = "https://";
             const y = "youtube.com";
             const e = "/embed/";
             const a = "?autoplay=1&mute=0&rel=0";
             
             const playerUrl = p + y + e + vid + a;
-            
             document.getElementById('yt-player').src = playerUrl;
+            document.getElementById('debug').innerText = "Playing Video ID: " + vid;
         } else {
-            document.getElementById('track-title').innerText = "Video ID missing";
+            document.getElementById('debug').innerText = "ERROR: Video ID from bot is empty!";
         }
     </script>
 </body>
