@@ -1,3 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #play-btn {
+            background-color: #111111;
+            color: #ffffff;
+            border: 1px solid #333333;
+            padding: 20px 40px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 18px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,255,255,0.05);
+        }
+        #play-btn:active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="play-btn">🔊 LISTEN IN TG</button>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
@@ -14,17 +52,17 @@
                 const baseUrl = "https://youtube.com";
                 const musicUrl = baseUrl + searchQuery;
 
-                // Передаем параметр try_instant_view: false, чтобы обойти блокировку Telegram
+                // Метод А: Официальный запуск ссылки через Telegram WebApp API
                 tg.openLink(musicUrl, { try_instant_view: false });
                 
-                // На всякий случай дублируем классическим браузерным переходом, если API ТГ зависнет
+                // Метод Б: Железобетонный браузерный дубляж на случай блокировки API мессенджером
                 setTimeout(function() {
-                    window.open(musicUrl, '_blank');
-                    tg.close();
-                }, 100);
+                    window.location.href = musicUrl;
+                }, 50);
             } else {
                 tg.close();
             }
         };
     </script>
-
+</body>
+</html>
