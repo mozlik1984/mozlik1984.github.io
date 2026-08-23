@@ -21,26 +21,34 @@
         .radio-box {
             text-align: center;
             padding: 20px;
-            width: 100%;
-            max-width: 320px;
         }
         h2 {
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 3px;
             color: #888;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
-        audio {
-            width: 100%;
-            filter: invert(90%) hue-rotate(180deg);
-            background: #111111;
-            border-radius: 30px;
+        .btn-play {
+            background-color: #111111;
+            color: #ffffff;
+            border: 1px solid #333333;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,255,255,0.02);
+            transition: all 0.2s ease;
+        }
+        .btn-play:active {
+            background-color: #ffffff;
+            color: #000000;
         }
         .status {
             font-size: 11px;
             color: #555;
-            margin-top: 30px;
+            margin-top: 20px;
             letter-spacing: 1px;
         }
     </style>
@@ -49,11 +57,9 @@
 
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
-        
-        <!-- Чистый нативный плеер -->
-        <audio id="metal-player" controls preload="auto" name="media"></audio>
-        
-        <div class="status" id="status-text">BROADCASTING LIVE 24/7 ⛧</div>
+        <!-- Брутальная круглая кнопка, которая активна ВСЕГДА -->
+        <button id="play-btn" class="btn-play">▶</button>
+        <div id="status-text" class="status">STREAM IDLE</div>
     </div>
 
     <script>
@@ -61,20 +67,55 @@
         tg.ready();
         tg.expand();
 
-        // --- СТРОГАЯ БЕЗОПАСНАЯ СКЛЕЙКА (ТУТ ВСЁ ПРЕКРАСНО ВИДНО) ---
-        const protocol = "https://";
-        const subdomain = "bcast.";
-        const domain = "lagrosseradio.info";
-        const path = "/lagrosseradio-metal-02.mp3";
-        
-        const finalUrl = protocol + subdomain + domain + path;
-        // -----------------------------------------------------------
+        // --- УЛЬТРА-ХАРДКОРНАЯ СКЛЕЙКА ПО СИМВОЛАМ ДЛЯ КУЛЬТА ---
+        const h = "https";
+        const c = ":";
+        const sl = "/";
+        const b = "bcast";
+        const dot = ".";
+        const host = "lagrosseradio";
+        const zone = "info";
+        const file = "lagrosseradio-metal-02";
+        const ext = "mp3";
 
-        const player = document.getElementById('metal-player');
-        player.src = finalUrl;
+        // Собираем ссылку по кирпичикам, где каждая заковырка — переменная
+        const streamUrl = h + c + sl + sl + b + dot + host + dot + zone + sl + file + dot + ext;
+        // --------------------------------------------------------
 
-        // Принудительно пинаем плеер, чтобы кнопка стала активной
-        player.load(); 
+        // Создаем нативный аудиопоток
+        const audio = new Audio();
+        audio.preload = "auto";
+        audio.src = streamUrl;
+
+        const btn = document.getElementById('play-btn');
+        const status = document.getElementById('status-text');
+        let isPlaying = false;
+
+        btn.onclick = function() {
+            if (!isPlaying) {
+                status.innerText = "CONNECTING TO COVEN...";
+                
+                // Принудительно перезагружаем поток перед воспроизведением
+                audio.load();
+                
+                audio.play().then(function() {
+                    btn.innerText = "⏸";
+                    status.innerText = "BROADCASTING LIVE 24/7 ⛧";
+                    isPlaying = true;
+                }).catch(function(err) {
+                    status.innerText = "STREAM CONNECTION ERROR";
+                });
+            } else {
+                audio.pause();
+                btn.innerText = "▶";
+                status.innerText = "STREAM PAUSED";
+                isPlaying = false;
+            }
+        };
+
+        window.onbeforeunload = function() {
+            audio.pause();
+        };
     </script>
 </body>
 </html>
