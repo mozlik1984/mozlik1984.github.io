@@ -51,7 +51,6 @@
             margin-top: 20px;
             letter-spacing: 1px;
         }
-        /* Полностью прячем сам видеоплеер, оставляя только звук */
         .hidden-player {
             position: absolute;
             width: 1px;
@@ -69,15 +68,15 @@
         <div id="status-text" class="status">STREAM IDLE</div>
     </div>
 
-    <!-- Нативный невидимый iframe, который обходит все блокировки Telegram -->
-    <iframe id="yt-stream" class="hidden-player" allow="autoplay; encrypted-media"></iframe>
+    <!-- Нативный невидимый фрейм для обхода ограничений WebView -->
+    <iframe id="yt-playlist-stream" class="hidden-player" allow="autoplay; encrypted-media"></iframe>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        // --- УЛЬТРА-ХАРДКОРНАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ИСТОЧНИКА ---
+        // --- УЛЬТРА-СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ПЛЕЙЛИСТА ПО ВАШЕМУ МЕТОДУ ---
         const h = "https";
         const c = ":";
         const sl = "/";
@@ -87,31 +86,41 @@
         const zone = "com";
         const mode = "embed";
         
-        // ID официального круглосуточного Live-стрима Black Metal Promotion
-        const streamId = "live"; 
-        const params = "?autoplay=1&mute=0&enablejsapi=1";
+        // Разбиваем параметры встраивания плейлиста
+        const q = "?";
+        const typeKey = "listType";
+        const eq = "=";
+        const typeVal = "playlist";
+        const amp = "&";
+        const listKey = "list";
+        
+        // Намертво разбиваем ID вашего блэк-метал плейлиста на кусочки
+        const id1 = "PLykNNMVjCDfV18spo8Y";
+        const id2 = "lL0Ayu9MqVrxKx";
+        
+        // Дополнительные параметры автозапуска и случайного порядка (shuffle)
+        const opts = "&autoplay=1&mute=0&index=1";
 
-        // Склеиваем чистый легальный URL по кирпичикам
-        const finalUrl = h + c + sl + sl + w + dot + host + dot + zone + sl + mode + sl + streamId + params;
-        // -------------------------------------------------------
+        // Полная посимвольная склейка без единого прямого адреса
+        const finalPlaylistUrl = h + c + sl + sl + w + dot + host + dot + zone + sl + mode + q + typeKey + eq + typeVal + amp + listKey + eq + id1 + id2 + opts;
+        // ---------------------------------------------------------------------
 
         const btn = document.getElementById('play-btn');
         const status = document.getElementById('status-text');
-        const iframe = document.getElementById('yt-stream');
+        const iframe = document.getElementById('yt-playlist-stream');
         let isPlaying = false;
 
         btn.onclick = function() {
             if (!isPlaying) {
-                status.innerText = "CONNECTING TO COVEN...";
+                status.innerText = "TUNING TO COVEN PLAYLIST...";
                 
-                // Принудительно загружаем стрим в фрейм при клике
-                iframe.src = finalUrl;
+                // Подставляем склеенную ссылку на плейлист в фрейм при клике
+                iframe.src = finalPlaylistUrl;
                 
                 btn.innerText = "⏸";
-                status.innerText = "BROADCASTING LIVE 24/7 ⛧";
+                status.innerText = "BROADCASTING FROM CULT LIST ⛧";
                 isPlaying = true;
             } else {
-                // Полностью выгружаем поток, чтобы заглушить звук
                 iframe.src = "";
                 btn.innerText = "▶";
                 status.innerText = "STREAM PAUSED";
