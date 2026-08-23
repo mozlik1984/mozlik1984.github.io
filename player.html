@@ -3,42 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Подключаем официальный скрипт Telegram WebApp API -->
     <script src="https://telegram.org"></script>
     <style>
         body {
             background-color: #0b0b0b;
+            color: #eeeeee;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            overflow: hidden;
         }
-        .metal-btn {
-            display: inline-block;
-            background-color: #111111;
-            color: #ffffff;
-            border: 1px solid #333333;
-            padding: 20px 40px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 18px;
-            letter-spacing: 3px;
+        .player-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+        .player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        h2 {
+            font-size: 14px;
             text-transform: uppercase;
-            text-decoration: none;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 0 15px rgba(255,255,255,0.05);
-        }
-        .metal-btn:active {
-            background-color: #ffffff;
-            color: #000000;
+            padding: 0 10px;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <!-- target="_blank" сообщает браузеру, что нужно открыть внешнее приложение -->
-    <a id="lnk" class="metal-btn" href="#" target="_blank">🔊 LISTEN IN TG</a>
+    <h2 id="track-title">Loading dark art...</h2>
+    
+    <div class="player-container">
+        <!-- Официальный легальный iframe плеер YouTube -->
+        <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -48,34 +62,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const artist = urlParams.get('artist') || '';
         const album = urlParams.get('album') || '';
-
+        
         if (artist || album) {
+            const fullName = artist + " - " + album;
+            document.getElementById('track-title').innerText = fullName;
+
+            // Формируем чистый поисковый запрос для YouTube
             const rawQuery = artist + " " + album + " Full Album";
             const searchQuery = encodeURIComponent(rawQuery);
             
-            // Наша безопасная разделенная склейка домена
+            // Используем специальный официальный хак YouTube для встраивания поиска
+            // Он находит первое релевантное видео по запросу и сразу загружает его в плеер
             const p = "https://";
-            const m = "music.";
-            const y = "youtube.com";
-            const s = "/search?q=";
-            const musicUrl = p + m + y + s + searchQuery;
-
-            const linkElement = document.getElementById('lnk');
+            const y = "://youtube.com";
+            const e = "/embed?listType=search&list=";
+            const a = "&autoplay=1&mute=0&rel=0";
             
-            // Прописываем ссылку в саму кнопку
-            linkElement.href = musicUrl;
-
-            // Нативный перехват клика через Telegram WebApp API
-            linkElement.onclick = function(e) {
-                // Отменяем стандартное поведение браузера, чтобы применить метод ТГ
-                e.preventDefault(); 
-                
-                // Это официальный метод Telegram для принудительного открытия внешних ссылок
-                tg.openLink(musicUrl);
-                
-                // Закрываем шторку WebApp, так как пользователь уже ушел в плеер
-                tg.close();
-            };
+            // Склеиваем по кусочкам через плюс
+            const playerUrl = p + y + e + searchQuery + a;
+            
+            document.getElementById('yt-player').src = playerUrl;
+        } else {
+            document.getElementById('track-title').innerText = "Release not found";
         }
     </script>
 </body>
