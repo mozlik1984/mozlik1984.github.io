@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://telegram.org"></script>
     <style>
         body {
             background-color: #0b0b0b;
-            color: #eeeeee;
-            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
@@ -23,8 +19,6 @@
             width: 100%;
             padding-bottom: 56.25%;
             height: 0;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
         }
         .player-container iframe {
             position: absolute;
@@ -34,57 +28,12 @@
             height: 100%;
             border: none;
         }
-        h2 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-align: center;
-            padding: 0 10px;
-            color: #888;
-        }
-        .debug-msg {
-            color: #ff3333;
-            font-size: 12px;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
-
-    <h2 id="track-title">STILL LOADING...</h2>
-    
     <div class="player-container">
-        <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!-- Ссылка на видео будет подставляться ботом напрямую -->
+        <iframe id="yt-player" src="https://youtube.com" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
-    
-    <div id="debug" class="debug-msg"></div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const artist = urlParams.get('artist') || '';
-        const album = urlParams.get('album') || '';
-        const vid = urlParams.get('vid') || '';
-        
-        // Выводим название в любом случае, чтобы понять, что JS работает
-        document.getElementById('track-title').innerText = artist + " - " + album;
-
-        if (vid && vid.length > 3) {
-            const p = "https://";
-            const y = "youtube.com";
-            const e = "/embed/";
-            const a = "?autoplay=1&mute=0&rel=0";
-            
-            const playerUrl = p + y + e + vid + a;
-            document.getElementById('yt-player').src = playerUrl;
-            document.getElementById('debug').innerText = "Playing Video ID: " + vid;
-        } else {
-            document.getElementById('debug').innerText = "ERROR: Video ID from bot is empty!";
-        }
-    </script>
 </body>
 </html>
