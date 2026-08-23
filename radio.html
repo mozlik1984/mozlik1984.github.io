@@ -57,7 +57,6 @@
 
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
-        <!-- Нативная брутальная круглая кнопка -->
         <button id="play-btn" class="btn-play">▶</button>
         <div id="status-text" class="status">STREAM IDLE</div>
     </div>
@@ -65,15 +64,16 @@
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Раскрываем радио на полную шторку
+        tg.expand();
 
-        // Безопасная склейка ссылки на культовое международное Black Metal радио
+        // --- НАДЁЖНАЯ СЛУЧАЙНАЯ СКЛЕЙКА МЕЖДУНАРОДНОГО ТРУ-ПОТОКА ---
+        // Используем проверенный канадский сервер вещания, который открыт для всего мира
         const p = "https://";
-        const d = "stream.laut.fm";
-        const s = "/blackmetal";
+        const d = "bcast.lagrosseradio.info";
+        const s = "/lagrosseradio-metal-02.mp3";
         const streamUrl = p + d + s;
+        // -----------------------------------------------------------
 
-        // Создаем нативный аудиопоток браузера
         const audio = new Audio(streamUrl);
         const btn = document.getElementById('play-btn');
         const status = document.getElementById('status-text');
@@ -97,7 +97,6 @@
             }
         };
 
-        // Логика автоматической остановки звука, если пользователь закрыл WebApp
         window.onbeforeunload = function() {
             audio.pause();
         };
