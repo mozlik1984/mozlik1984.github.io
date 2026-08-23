@@ -57,7 +57,6 @@
 
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
-        <!-- Брутальная круглая кнопка, которая активна ВСЕГДА -->
         <button id="play-btn" class="btn-play">▶</button>
         <div id="status-text" class="status">STREAM IDLE</div>
     </div>
@@ -67,22 +66,20 @@
         tg.ready();
         tg.expand();
 
-        // --- УЛЬТРА-ХАРДКОРНАЯ СКЛЕЙКА ПО СИМВОЛАМ ДЛЯ КУЛЬТА ---
-        const h = "https";
-        const c = ":";
-        const sl = "/";
-        const b = "bcast";
+        # --- СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ДЛЯ ZENO MEDIA ПОТОКА ---
+        const scheme = "https";
+        const colon = ":";
+        const slash = "/";
+        const node = "stream";
         const dot = ".";
-        const host = "lagrosseradio";
-        const zone = "info";
-        const file = "lagrosseradio-metal-02";
-        const ext = "mp3";
+        const provider = "zeno";
+        const zone = "fm";
+        const mount = "4rzv7p8u108uv";
 
-        // Собираем ссылку по кирпичикам, где каждая заковырка — переменная
-        const streamUrl = h + c + sl + sl + b + dot + host + dot + zone + sl + file + dot + ext;
-        // --------------------------------------------------------
+        # Собираем чистую прямую ссылку: https://zeno.fm
+        const streamUrl = scheme + colon + slash + slash + node + dot + provider + dot + zone + slash + mount;
+        # -----------------------------------------------------------
 
-        // Создаем нативный аудиопоток
         const audio = new Audio();
         audio.preload = "auto";
         audio.src = streamUrl;
@@ -95,7 +92,6 @@
             if (!isPlaying) {
                 status.innerText = "CONNECTING TO COVEN...";
                 
-                // Принудительно перезагружаем поток перед воспроизведением
                 audio.load();
                 
                 audio.play().then(function() {
@@ -119,4 +115,3 @@
     </script>
 </body>
 </html>
-
