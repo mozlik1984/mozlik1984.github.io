@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подключаем официальный скрипт Telegram WebApp API -->
     <script src="https://telegram.org"></script>
     <style>
         body {
@@ -36,7 +37,8 @@
 </head>
 <body>
 
-    <a id="lnk" class="metal-btn" href="#">🔊 LISTEN IN TG</a>
+    <!-- target="_blank" сообщает браузеру, что нужно открыть внешнее приложение -->
+    <a id="lnk" class="metal-btn" href="#" target="_blank">🔊 LISTEN IN TG</a>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -51,17 +53,29 @@
             const rawQuery = artist + " " + album + " Full Album";
             const searchQuery = encodeURIComponent(rawQuery);
             
-            // --- СТРОГАЯ БЕЗОПАСНАЯ СКЛЕЙКА ДЛЯ ОБХОДА БАГА ---
+            // Наша безопасная разделенная склейка домена
             const p = "https://";
             const m = "music.";
             const y = "youtube.com";
             const s = "/search?q=";
-            
-            // Полная склейка домена по кусочкам через плюс
             const musicUrl = p + m + y + s + searchQuery;
-            // --------------------------------------------------
 
-            document.getElementById('lnk').href = musicUrl;
+            const linkElement = document.getElementById('lnk');
+            
+            // Прописываем ссылку в саму кнопку
+            linkElement.href = musicUrl;
+
+            // Нативный перехват клика через Telegram WebApp API
+            linkElement.onclick = function(e) {
+                // Отменяем стандартное поведение браузера, чтобы применить метод ТГ
+                e.preventDefault(); 
+                
+                // Это официальный метод Telegram для принудительного открытия внешних ссылок
+                tg.openLink(musicUrl);
+                
+                // Закрываем шторку WebApp, так как пользователь уже ушел в плеер
+                tg.close();
+            };
         }
     </script>
 </body>
