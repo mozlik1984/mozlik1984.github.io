@@ -14,7 +14,8 @@
             justify-content: center;
             height: 100vh;
         }
-        #play-btn {
+        .metal-btn {
+            display: inline-block;
             background-color: #111111;
             color: #ffffff;
             border: 1px solid #333333;
@@ -22,11 +23,12 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 18px;
             letter-spacing: 3px;
-            cursor: pointer;
             text-transform: uppercase;
+            text-decoration: none;
+            text-align: center;
             box-shadow: 0 0 15px rgba(255,255,255,0.05);
         }
-        #play-btn:active {
+        .metal-btn:active {
             background-color: #ffffff;
             color: #000000;
         }
@@ -34,7 +36,7 @@
 </head>
 <body>
 
-    <button id="play-btn">🔊 LISTEN IN TG</button>
+    <a id="lnk" class="metal-btn" href="#">🔊 LISTEN IN TG</a>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -45,24 +47,22 @@
         const artist = urlParams.get('artist') || '';
         const album = urlParams.get('album') || '';
 
-        document.getElementById('play-btn').onclick = function() {
-            if (artist || album) {
-                const rawQuery = artist + " " + album + " Full Album";
-                const searchQuery = encodeURIComponent(rawQuery);
-                const baseUrl = "https://youtube.com";
-                const musicUrl = baseUrl + searchQuery;
+        if (artist || album) {
+            const rawQuery = artist + " " + album + " Full Album";
+            const searchQuery = encodeURIComponent(rawQuery);
+            
+            // --- СТРОГАЯ БЕЗОПАСНАЯ СКЛЕЙКА ДЛЯ ОБХОДА БАГА ---
+            const p = "https://";
+            const m = "music.";
+            const y = "youtube.com";
+            const s = "/search?q=";
+            
+            // Полная склейка домена по кусочкам через плюс
+            const musicUrl = p + m + y + s + searchQuery;
+            // --------------------------------------------------
 
-                // Метод А: Официальный запуск ссылки через Telegram WebApp API
-                tg.openLink(musicUrl, { try_instant_view: false });
-                
-                // Метод Б: Железобетонный браузерный дубляж на случай блокировки API мессенджером
-                setTimeout(function() {
-                    window.location.href = musicUrl;
-                }, 50);
-            } else {
-                tg.close();
-            }
-        };
+            document.getElementById('lnk').href = musicUrl;
+        }
     </script>
 </body>
 </html>
