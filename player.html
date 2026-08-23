@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +50,7 @@
     <h2 id="track-title">Loading dark art...</h2>
     
     <div class="player-container">
-        <!-- Официальный легальный iframe плеер YouTube -->
+        <!-- Чистый легальный iframe-плеер, который включит конкретное видео -->
         <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
 
@@ -62,28 +62,26 @@
         const urlParams = new URLSearchParams(window.location.search);
         const artist = urlParams.get('artist') || '';
         const album = urlParams.get('album') || '';
+        const vid = urlParams.get('vid') || '';
         
-        if (artist || album) {
-            const fullName = artist + " - " + album;
-            document.getElementById('track-title').innerText = fullName;
+        if (vid) {
+            if (artist || album) {
+                document.getElementById('track-title').innerText = artist + " - " + album;
+            } else {
+                document.getElementById('track-title').innerText = "Playing Release";
+            }
 
-            // Формируем чистый поисковый запрос для YouTube
-            const rawQuery = artist + " " + album + " Full Album";
-            const searchQuery = encodeURIComponent(rawQuery);
-            
-            // Используем специальный официальный хак YouTube для встраивания поиска
-            // Он находит первое релевантное видео по запросу и сразу загружает его в плеер
+            // Классическая склейка через плюс для встраивания конкретного ID видео
             const p = "https://";
             const y = "youtube.com";
-            const e = "/embed?listType=search&list=";
-            const a = "&autoplay=1&mute=0&rel=0";
+            const e = "/embed/";
+            const a = "?autoplay=1&mute=0&rel=0";
             
-            // Склеиваем по кусочкам через плюс
-            const playerUrl = p + y + e + searchQuery + a;
+            const playerUrl = p + y + e + vid + a;
             
             document.getElementById('yt-player').src = playerUrl;
         } else {
-            document.getElementById('track-title').innerText = "Release not found";
+            document.getElementById('track-title').innerText = "Video ID missing";
         }
     </script>
 </body>
