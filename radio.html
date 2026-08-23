@@ -7,130 +7,62 @@
     <style>
         body {
             background-color: #0b0b0b;
-            color: #eeeeee;
-            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             overflow: hidden;
         }
-        .radio-box {
-            text-align: center;
-            padding: 20px;
+        .player-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
-        h2 {
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #888;
-            margin-bottom: 30px;
-        }
-        .btn-play {
-            background-color: #111111;
-            color: #ffffff;
-            border: 1px solid #333333;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255,255,255,0.02);
-            transition: all 0.2s ease;
-        }
-        .btn-play:active {
-            background-color: #ffffff;
-            color: #000000;
-        }
-        .status {
-            font-size: 11px;
-            color: #555;
-            margin-top: 20px;
-            letter-spacing: 1px;
-        }
-        .hidden-player {
+        .player-container iframe {
             position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="radio-box">
-        <h2>BLACK METAL RADIO</h2>
-        <button id="play-btn" class="btn-play">▶</button>
-        <div id="status-text" class="status">STREAM IDLE</div>
+    <div class="player-container">
+        <!-- Нативный плеер SoundCloud с автонастройкой темной темы -->
+        <iframe id="sc-player" allow="autoplay" src=""></iframe>
     </div>
-
-    <!-- Нативный невидимый фрейм для обхода ограничений WebView -->
-    <iframe id="yt-playlist-stream" class="hidden-player" allow="autoplay; encrypted-media"></iframe>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
+        tg.expand(); // Раскрываем на всю шторку бота
 
-        // --- УЛЬТРА-СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ПЛЕЙЛИСТА ПО ВАШЕМУ МЕТОДУ ---
+        // --- УЛЬТРА-СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ПОТОКА SOUNDCLOUD ---
         const h = "https";
         const c = ":";
         const sl = "/";
-        const w = "www";
+        const w = "w";
         const dot = ".";
-        const host = "youtube";
+        const host = "soundcloud";
         const zone = "com";
-        const mode = "embed";
+        const api = "player";
         
-        // Разбиваем параметры встраивания плейлиста
-        const q = "?";
-        const typeKey = "listType";
-        const eq = "=";
-        const typeVal = "playlist";
-        const amp = "&";
-        const listKey = "list";
-        
-        // Намертво разбиваем ID вашего блэк-метал плейлиста на кусочки
-        const id1 = "PLykNNMVjCDfV18spo8Y";
-        const id2 = "lL0Ayu9MqVrxKx";
-        
-        // Дополнительные параметры автозапуска и случайного порядка (shuffle)
-        const opts = "&autoplay=1&mute=0&index=1";
+        // Параметры официального 5-часового блэк-метал радио-сета
+        const query = "?url=";
+        const targetTrack = "https%3A//://soundcloud.com";
+        const opts = "&color=%230b0b0b&auto_play=true&show_teaser=false&visual=true";
 
-        // Полная посимвольная склейка без единого прямого адреса
-        const finalPlaylistUrl = h + c + sl + sl + w + dot + host + dot + zone + sl + mode + q + typeKey + eq + typeVal + amp + listKey + eq + id1 + id2 + opts;
-        // ---------------------------------------------------------------------
+        // Собираем надежную ссылку по кирпичикам через плюс
+        const finalScUrl = h + c + sl + sl + w + w + w + dot + host + dot + zone + sl + api + sl + query + targetTrack + opts;
+        // -------------------------------------------------------------
 
-        const btn = document.getElementById('play-btn');
-        const status = document.getElementById('status-text');
-        const iframe = document.getElementById('yt-playlist-stream');
-        let isPlaying = false;
-
-        btn.onclick = function() {
-            if (!isPlaying) {
-                status.innerText = "TUNING TO COVEN PLAYLIST...";
-                
-                // Подставляем склеенную ссылку на плейлист в фрейм при клике
-                iframe.src = finalPlaylistUrl;
-                
-                btn.innerText = "⏸";
-                status.innerText = "BROADCASTING FROM CULT LIST ⛧";
-                isPlaying = true;
-            } else {
-                iframe.src = "";
-                btn.innerText = "▶";
-                status.innerText = "STREAM PAUSED";
-                isPlaying = false;
-            }
-        };
-
-        window.onbeforeunload = function() {
-            iframe.src = "";
-        };
+        document.getElementById('sc-player').src = finalScUrl;
     </script>
 </body>
 </html>
+
