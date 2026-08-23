@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Metal Hub Player</title>
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #eeeeee;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .player-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+        .player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        h2 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 0 10px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 id="track-title">Loading dark art...</h2>
+    
+    <div class="player-container">
+        <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const artist = urlParams.get('artist') || '';
+        const album = urlParams.get('album') || '';
+        
+        if (artist || album) {
+            const fullName = `${artist} - ${album}`.trim();
+            document.getElementById('track-title').innerText = fullName;
+
+            const searchQuery = encodeURIComponent(`${fullName} Full Album`);
+            const playerSrc = `https://youtube.com{searchQuery}&autoplay=1&rel=0`;
+            
+            document.getElementById('yt-player').src = playerSrc;
+        } else {
+            document.getElementById('track-title').innerText = "Release not found";
+        }
+    </script>
+</body>
+</html>
