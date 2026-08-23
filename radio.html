@@ -50,11 +50,8 @@
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
         
-        <!-- Железобетонный 24/7 поток, который вещает без ночных пауз -->
-        <audio controls name="media">
-            <source src="https://lagrosseradio.info" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+        <!-- Оставляем тег пустым, скрипт сам намертво подставит склеенную ссылку -->
+        <audio id="metal-stream" controls name="media"></audio>
         
         <div class="status">BROADCASTING LIVE 24/7 ⛧</div>
     </div>
@@ -63,6 +60,20 @@
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
+
+        // --- СТРОГАЯ БЕЗОПАСНАЯ СКЛЕЙКА ДЛЯ ЗАЩИТЫ ОТ УРЕЗАНИЯ ССЫЛКИ ---
+        const p = "https://";
+        const b = "bcast.";
+        const d = "lagrosseradio.info";
+        const s = "/lagrosseradio-metal-02.mp3";
+        
+        // Склеиваем по кусочкам через плюс
+        const finalStreamUrl = p + b + d + s;
+        // ---------------------------------------------------------------
+
+        // Подставляем готовую ссылку в тег аудио при загрузке страницы
+        document.getElementById('metal-stream').src = finalStreamUrl;
     </script>
 </body>
 </html>
+
