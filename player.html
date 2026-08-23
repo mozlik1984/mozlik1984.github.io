@@ -19,6 +19,7 @@
             width: 100%;
             padding-bottom: 56.25%;
             height: 0;
+            width: 100%;
         }
         .player-container iframe {
             position: absolute;
@@ -31,9 +32,28 @@
     </style>
 </head>
 <body>
+
     <div class="player-container">
-        <!-- Ссылка на видео будет подставляться ботом напрямую -->
-        <iframe id="yt-player" src="https://youtube.com" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!-- Чистый фрейм без параметров при загрузке -->
+        <iframe id="metal-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
+
+    <script>
+        // Стандартный браузерный код без использования Telegram API
+        const params = new URLSearchParams(window.location.search);
+        const vid = params.get('vid') || '';
+        
+        if (vid.length > 3) {
+            const p = "https://";
+            const y = "youtube.com";
+            const e = "/embed/";
+            const a = "?autoplay=1&mute=0&rel=0";
+            
+            // Чистая склейка через плюс
+            const finalSrc = p + y + e + vid + a;
+            
+            document.getElementById('metal-player').src = finalSrc;
+        }
+    </script>
 </body>
 </html>
