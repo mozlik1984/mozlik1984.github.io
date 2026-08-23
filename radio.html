@@ -33,16 +33,14 @@
 <body>
 
     <div class="player-container">
-        <!-- Нативный плеер SoundCloud с автонастройкой темной темы -->
         <iframe id="sc-player" allow="autoplay" src=""></iframe>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Раскрываем на всю шторку бота
+        tg.expand();
 
-        // --- УЛЬТРА-СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ПОТОКА SOUNDCLOUD ---
         const h = "https";
         const c = ":";
         const sl = "/";
@@ -51,15 +49,11 @@
         const host = "soundcloud";
         const zone = "com";
         const api = "player";
-        
-        // Параметры официального 5-часового блэк-метал радио-сета
         const query = "?url=";
         const targetTrack = "https%3A//://soundcloud.com";
         const opts = "&color=%230b0b0b&auto_play=true&show_teaser=false&visual=true";
 
-        // Собираем надежную ссылку по кирпичикам через плюс
         const finalScUrl = h + c + sl + sl + w + w + w + dot + host + dot + zone + sl + api + sl + query + targetTrack + opts;
-        // -------------------------------------------------------------
 
         document.getElementById('sc-player').src = finalScUrl;
     </script>
