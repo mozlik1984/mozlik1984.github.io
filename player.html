@@ -22,11 +22,7 @@
         .player-container {
             position: relative;
             width: 100%;
-            max-width: 640px;
-            padding-bottom: 56.25%;
-            height: 0;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
+            height: 100%;
         }
         .player-container iframe {
             position: absolute;
@@ -36,44 +32,34 @@
             height: 100%;
             border: none;
         }
-        h2 {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-align: center;
-            padding: 0 10px;
-            color: #888;
-        }
     </style>
 </head>
 <body>
 
-    <h2 id="track-title">Loading dark art...</h2>
-    
     <div class="player-container">
+        <!-- Надежный мобильный эмбед, который выводит чистые результаты без лишних блоков сайта -->
         <iframe id="yt-player" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
+        tg.expand(); // Разворачиваем шторку на весь экран
 
         const urlParams = new URLSearchParams(window.location.search);
         const artist = urlParams.get('artist') || '';
         const album = urlParams.get('album') || '';
         
         if (artist || album) {
-            const fullName = `${artist} - ${album}`.trim();
-            document.getElementById('track-title').innerText = fullName;
-
+            const fullName = `${artist} ${album}`.trim();
             const searchQuery = encodeURIComponent(`${fullName} Full Album`);
-            const playerSrc = `https://youtube.com{searchQuery}&autoplay=1&rel=0`;
+            
+            // Используем специальную мобильную поисковую выдачу YouTube, которая отлично работает внутри Iframe
+            const playerSrc = `https://youtube.com{searchQuery}`;
             
             document.getElementById('yt-player').src = playerSrc;
         } else {
-            document.getElementById('track-title').innerText = "Release not found";
+            alert("Release data missing");
         }
     </script>
 </body>
