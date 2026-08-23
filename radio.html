@@ -31,10 +31,9 @@
             color: #888;
             margin-bottom: 40px;
         }
-        /* Стилизуем нативный плеер под брутальный стиль проекта */
         audio {
             width: 100%;
-            filter: invert(90%) hue-rotate(180deg); /* Делает стандартный плеер стильным и темным */
+            filter: invert(90%) hue-rotate(180deg);
             background: #111111;
             border-radius: 30px;
         }
@@ -51,20 +50,19 @@
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
         
-        <!-- Железобетонный нативный HTML5 плеер, который Telegram никогда не заблокирует -->
-        <!-- Ссылка на поток blackmetal.live зашита напрямую -->
-        <audio controls autoplay name="media">
-            <source src="https://blackmetal.live" type="audio/mpeg">
+        <!-- Железобетонный 24/7 поток, который вещает без ночных пауз -->
+        <audio controls name="media">
+            <source src="https://lagrosseradio.info" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
         
-        <div class="status">BROADCASTING LIVE ⛧</div>
+        <div class="status">BROADCASTING LIVE 24/7 ⛧</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand(); // Раскрываем радио на полную шторку
+        tg.expand();
     </script>
 </body>
 </html>
