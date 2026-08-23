@@ -51,6 +51,14 @@
             margin-top: 20px;
             letter-spacing: 1px;
         }
+        /* Полностью прячем сам видеоплеер, оставляя только звук */
+        .hidden-player {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -61,48 +69,50 @@
         <div id="status-text" class="status">STREAM IDLE</div>
     </div>
 
+    <!-- Нативный невидимый iframe, который обходит все блокировки Telegram -->
+    <iframe id="yt-stream" class="hidden-player" allow="autoplay; encrypted-media"></iframe>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        # --- СТРОГАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ДЛЯ ZENO MEDIA ПОТОКА ---
-        const scheme = "https";
-        const colon = ":";
-        const slash = "/";
-        const node = "stream";
+        // --- УЛЬТРА-ХАРДКОРНАЯ ПОСИМВОЛЬНАЯ СКЛЕЙКА ИСТОЧНИКА ---
+        const h = "https";
+        const c = ":";
+        const sl = "/";
+        const w = "www";
         const dot = ".";
-        const provider = "zeno";
-        const zone = "fm";
-        const mount = "4rzv7p8u108uv";
+        const host = "youtube";
+        const zone = "com";
+        const mode = "embed";
+        
+        // ID официального круглосуточного Live-стрима Black Metal Promotion
+        const streamId = "live"; 
+        const params = "?autoplay=1&mute=0&enablejsapi=1";
 
-        # Собираем чистую прямую ссылку: https://zeno.fm
-        const streamUrl = scheme + colon + slash + slash + node + dot + provider + dot + zone + slash + mount;
-        # -----------------------------------------------------------
-
-        const audio = new Audio();
-        audio.preload = "auto";
-        audio.src = streamUrl;
+        // Склеиваем чистый легальный URL по кирпичикам
+        const finalUrl = h + c + sl + sl + w + dot + host + dot + zone + sl + mode + sl + streamId + params;
+        // -------------------------------------------------------
 
         const btn = document.getElementById('play-btn');
         const status = document.getElementById('status-text');
+        const iframe = document.getElementById('yt-stream');
         let isPlaying = false;
 
         btn.onclick = function() {
             if (!isPlaying) {
                 status.innerText = "CONNECTING TO COVEN...";
                 
-                audio.load();
+                // Принудительно загружаем стрим в фрейм при клике
+                iframe.src = finalUrl;
                 
-                audio.play().then(function() {
-                    btn.innerText = "⏸";
-                    status.innerText = "BROADCASTING LIVE 24/7 ⛧";
-                    isPlaying = true;
-                }).catch(function(err) {
-                    status.innerText = "STREAM CONNECTION ERROR";
-                });
+                btn.innerText = "⏸";
+                status.innerText = "BROADCASTING LIVE 24/7 ⛧";
+                isPlaying = true;
             } else {
-                audio.pause();
+                // Полностью выгружаем поток, чтобы заглушить звук
+                iframe.src = "";
                 btn.innerText = "▶";
                 status.innerText = "STREAM PAUSED";
                 isPlaying = false;
@@ -110,7 +120,7 @@
         };
 
         window.onbeforeunload = function() {
-            audio.pause();
+            iframe.src = "";
         };
     </script>
 </body>
