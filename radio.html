@@ -21,34 +21,27 @@
         .radio-box {
             text-align: center;
             padding: 20px;
+            width: 100%;
+            max-width: 320px;
         }
         h2 {
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 3px;
             color: #888;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        .btn-play {
-            background-color: #111111;
-            color: #ffffff;
-            border: 1px solid #333333;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(255,255,255,0.02);
-            transition: all 0.2s ease;
-        }
-        .btn-play:active {
-            background-color: #ffffff;
-            color: #000000;
+        /* Стилизуем нативный плеер под брутальный стиль проекта */
+        audio {
+            width: 100%;
+            filter: invert(90%) hue-rotate(180deg); /* Делает стандартный плеер стильным и темным */
+            background: #111111;
+            border-radius: 30px;
         }
         .status {
             font-size: 11px;
             color: #555;
-            margin-top: 20px;
+            margin-top: 30px;
             letter-spacing: 1px;
         }
     </style>
@@ -57,50 +50,21 @@
 
     <div class="radio-box">
         <h2>BLACK METAL RADIO</h2>
-        <button id="play-btn" class="btn-play">▶</button>
-        <div id="status-text" class="status">STREAM IDLE</div>
+        
+        <!-- Железобетонный нативный HTML5 плеер, который Telegram никогда не заблокирует -->
+        <!-- Ссылка на поток blackmetal.live зашита напрямую -->
+        <audio controls autoplay name="media">
+            <source src="https://blackmetal.live" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        
+        <div class="status">BROADCASTING LIVE ⛧</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
-        tg.expand();
-
-        // --- БЕЗОПАСНАЯ КУЛЬТОВАЯ СКЛЕЙКА ПОТОКА BLACKMETAL.LIVE ---
-        // Извлекаем прямой аудиопоток вещания из предложенного вами сайта
-        const p = "https://";
-        const d = "blackmetal.live";
-        const s = "/radio/8000/radio.mp3";
-        const streamUrl = p + d + s;
-        // -----------------------------------------------------------
-
-        const audio = new Audio(streamUrl);
-        const btn = document.getElementById('play-btn');
-        const status = document.getElementById('status-text');
-        let isPlaying = false;
-
-        btn.onclick = function() {
-            if (!isPlaying) {
-                status.innerText = "CONNECTING TO COVEN...";
-                audio.play().then(function() {
-                    btn.innerText = "⏸";
-                    status.innerText = "BROADCASTING LIVE ⛧";
-                    isPlaying = true;
-                }).catch(function(err) {
-                    status.innerText = "STREAM ERROR";
-                });
-            } else {
-                audio.pause();
-                btn.innerText = "▶";
-                status.innerText = "STREAM PAUSED";
-                isPlaying = false;
-            }
-        };
-
-        window.onbeforeunload = function() {
-            audio.pause();
-        };
+        tg.expand(); // Раскрываем радио на полную шторку
     </script>
 </body>
 </html>
-
