@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            background-color: #0b0b0b;
+            color: #eeeeee;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .radio-box {
+            text-align: center;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .btn-play {
+            background-color: #111111;
+            color: #ffffff;
+            border: 1px solid #333333;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,255,255,0.02);
+            transition: all 0.2s ease;
+        }
+        .btn-play:active {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .status {
+            font-size: 11px;
+            color: #555;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="radio-box">
+        <h2>BLACK METAL RADIO</h2>
+        <!-- Нативная брутальная круглая кнопка -->
+        <button id="play-btn" class="btn-play">▶</button>
+        <div id="status-text" class="status">STREAM IDLE</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand(); // Раскрываем радио на полную шторку
+
+        // Безопасная склейка ссылки на культовое международное Black Metal радио
+        const p = "https://";
+        const d = "stream.laut.fm";
+        const s = "/blackmetal";
+        const streamUrl = p + d + s;
+
+        // Создаем нативный аудиопоток браузера
+        const audio = new Audio(streamUrl);
+        const btn = document.getElementById('play-btn');
+        const status = document.getElementById('status-text');
+        let isPlaying = false;
+
+        btn.onclick = function() {
+            if (!isPlaying) {
+                status.innerText = "CONNECTING TO COVEN...";
+                audio.play().then(function() {
+                    btn.innerText = "⏸";
+                    status.innerText = "BROADCASTING LIVE ⛧";
+                    isPlaying = true;
+                }).catch(function(err) {
+                    status.innerText = "STREAM ERROR";
+                });
+            } else {
+                audio.pause();
+                btn.innerText = "▶";
+                status.innerText = "STREAM PAUSED";
+                isPlaying = false;
+            }
+        };
+
+        // Логика автоматической остановки звука, если пользователь закрыл WebApp
+        window.onbeforeunload = function() {
+            audio.pause();
+        };
+    </script>
+</body>
+</html>
+
