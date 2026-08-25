@@ -3,73 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Metal Hub Radio</title>
+    <!-- Подключаем скрипт Telegram WebApp -->
     <script src="https://telegram.org"></script>
+    <script>
+        window.onload = function() {
+            // Собираем ссылку на тему из кусочков по нашему правилу
+            const protocol = "https://";
+            const domain = "t.me/";
+            const path = "c/3870973478/24";
+            const finalUrl = protocol + domain + path;
+
+            try {
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+                // Команда Telegram для мгновенного открытия внутренней ссылки
+                tg.openTelegramLink(finalUrl);
+                // Мгновенно закрываем окно WebApp, чтобы юзер его не видел
+                tg.close();
+            } catch (e) {
+                // Если открыли просто в браузере, делаем обычный редирект
+                window.location.href = finalUrl;
+            }
+        };
+    </script>
     <style>
+        /* Мрачный черный фон на долю секунды, пока идет перенаправление */
         body {
             background-color: #0b0b0b;
-            color: #eeeeee;
-            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .radio-box {
-            text-align: center;
-            padding: 20px;
-            width: 100%;
-            max-width: 320px;
-        }
-        h2 {
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #888;
-            margin-bottom: 40px;
-        }
-        audio {
-            width: 100%;
-            filter: invert(90%) hue-rotate(180deg);
-            background: #111111;
-            border-radius: 30px;
-        }
-        .status {
-            font-size: 11px;
-            color: #555;
-            margin-top: 30px;
-            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
-
-    <div class="radio-box">
-        <h2>BLACK METAL RADIO</h2>
-        
-        <!-- Нативный плеер с проверенным блэк-метал треком для теста звука в WebView -->
-        <audio id="metal-player" controls preload="auto" name="media"></audio>
-        
-        <div class="status">CULT STREAM LIVE ⛧</div>
-    </div>
-
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-        // Посимвольная склейка прямой ссылки на аудиофайл для обхода урезания
-        const p = "https://";
-        const d = "://soundhelix.com";
-        const s = "/examples/mp3/SoundHelix-Song-1.mp3";
-        const finalUrl = p + d + s;
-
-        const player = document.getElementById('metal-player');
-        player.src = finalUrl;
-        player.load();
-    </script>
 </body>
 </html>
